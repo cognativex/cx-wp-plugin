@@ -231,7 +231,7 @@ class CognativexPlugin
 
     public function wp_cognativex_render_settings_field($args)
     {
-        /* EXAMPLE INPUT
+        /*  EXAMPLE INPUT
                   'type'      => 'input',
                   'subtype'   => '',
                   'id'    => $this->wp_cognativex.'_example_setting',
