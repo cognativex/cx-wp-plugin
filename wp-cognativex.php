@@ -46,7 +46,7 @@ class CognativexPlugin
 
     public $plugin_name = "wp-cognativex";
     public $plugin_title = "CognativeX Plugin";
-    public $plugin_version = "1.0.0";
+    public $plugin_version = "1.1.2";
 
 
     public $add_something_nonce;
