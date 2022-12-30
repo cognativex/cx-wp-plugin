@@ -17,24 +17,22 @@
  *  Author URI:        https://cognativex.com
  *  License:           GPLv2 or later
  *  Text Domain:       wp-cognativex
- */   
+ */
 
- 
+
 /*
- This program is free software; you can redistribute it and/or
+This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+*/
 
 //If no action has been specified, die
 if (!function_exists('add_action')) {
@@ -69,9 +67,9 @@ class CognativexPlugin
 
     function register()
     {
-        add_action( 'wp_head', array( $this, 'buildTrackerScript' ));
-        add_action( 'wp_head', array( $this, 'buildMetaScript' ));
-        add_action( 'wp_head', array( $this, 'buildWidgetScript' ));
+        add_action('wp_head', array($this, 'buildTrackerScript'));
+        add_action('wp_head', array($this, 'buildMetaScript'));
+        add_action('wp_head', array($this, 'buildWidgetScript'));
     }
 
     function activate()
@@ -81,6 +79,7 @@ class CognativexPlugin
         //generate a CPT (custom post type)
         //flush rewrite rules
 //        flush_rewrite_rules();
+        create_publisher();
     }
 
     function deactivate()
@@ -108,7 +107,7 @@ class CognativexPlugin
     public function displayPluginAdminSettings()
     {
         // set this var to be used in the settings-display view
-        $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']): 'general';
+        $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general';
         if (isset($_GET['error_message'])) {
             add_action('admin_notices', array($this, 'pluginNameSettingsMessages'));
             do_action('admin_notices', sanitize_text_field($_GET['error_message']));
@@ -134,7 +133,8 @@ class CognativexPlugin
         );
     }
 
-    public function testEchoIntoHead(){
+    public function testEchoIntoHead()
+    {
         echo "<script>alert('test')</script>";
     }
 
@@ -146,7 +146,7 @@ class CognativexPlugin
          * Third, register_setting
          */
         add_settings_section(
-        // ID used to identify this section and with which to register options
+            // ID used to identify this section and with which to register options
             'wp_cognativex_general_section',
             // Title to be displayed on the administration page
             'Basic Configurations',
@@ -180,7 +180,7 @@ class CognativexPlugin
             'wp_cognativex_domain_setting'
         );
         add_settings_section(
-        // ID used to identify this section and with which to register options
+            // ID used to identify this section and with which to register options
             'wp_cognativex_widget_section',
             // Title to be displayed on the administration page
             'Widget Settings',
@@ -222,7 +222,7 @@ class CognativexPlugin
     {
         echo __('<p>Please fill the following settings for the plugin to function properly; ex : example.com</p>', 'cognativex');
     }
-    
+
 
     public function wp_cognativex_display_widget_account()
     {
@@ -232,13 +232,13 @@ class CognativexPlugin
     public function wp_cognativex_render_settings_field($args)
     {
         /* EXAMPLE INPUT
-                  'type'      => 'input',
-                  'subtype'   => '',
-                  'id'    => $this->wp_cognativex.'_example_setting',
-                  'name'      => $this->wp_cognativex.'_example_setting',
-                  'required' => 'required="required"',
-                  'get_option_list' => "",
-                    'value_type' = serialized OR normal,
+        'type'      => 'input',
+        'subtype'   => '',
+        'id'    => $this->wp_cognativex.'_example_setting',
+        'name'      => $this->wp_cognativex.'_example_setting',
+        'required' => 'required="required"',
+        'get_option_list' => "",
+        'value_type' = serialized OR normal,
         'wp_data'=>(option or post_meta),
         'post_id' =>
         */
@@ -258,9 +258,9 @@ class CognativexPlugin
                     $max = (isset($args['max'])) ? 'max="' . $args['max'] . '"' : '';
                     if (isset($args['disabled'])) {
                         // hide the actual input bc if it was just a disabled input, the informaiton saved in the database would be wrong - bc it would pass empty values and wipe the actual information
-                        echo  '<input type="' . esc_attr($args['subtype']) . '" id="' . esc_attr($args['id']) . '_disabled" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '_disabled" size="40" disabled value="' . esc_attr($value) . '" /><input type="hidden" id="' . esc_attr($args['id']) . '" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '" size="40" value="' . esc_attr($value) . '" />' ;
+                        echo '<input type="' . esc_attr($args['subtype']) . '" id="' . esc_attr($args['id']) . '_disabled" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '_disabled" size="40" disabled value="' . esc_attr($value) . '" /><input type="hidden" id="' . esc_attr($args['id']) . '" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '" size="40" value="' . esc_attr($value) . '" />';
                     } else {
-                        echo  '<input type="' . esc_attr($args['subtype']) . '" id="' . esc_attr($args['id']) . '" "' . esc_attr($args['required']) . '" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '" size="40" value="' . esc_attr($value) . '" />';
+                        echo '<input type="' . esc_attr($args['subtype']) . '" id="' . esc_attr($args['id']) . '" "' . esc_attr($args['required']) . '" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '" size="40" value="' . esc_attr($value) . '" />';
                     }
                 } else {
                     $checked = ($value) ? 'checked' : '';
@@ -276,10 +276,10 @@ class CognativexPlugin
     public function buildTrackerScript()
     {
         $domain_option_value = get_option('wp_cognativex_domain_setting');
-        $domain_array = explode('.', $domain_option_value,-1);
-        $domain = implode('.',$domain_array);
+        $domain_array = explode('.', $domain_option_value, -1);
+        $domain = implode('.', $domain_array);
         $tracker_script = "
-<script>       
+<script>      
 (function (s, l, d, a) {
     var h = d.location.protocol,
         i = l + \"-\" + s,
@@ -294,7 +294,7 @@ class CognativexPlugin
     e.src = h + \"//\" + u + \"/\" + l + \"/cn.js?v=\" + dt;
     e.setAttribute('data-domain', a);
     f.parentNode.insertBefore(e, f);
-})(\"script\", \"cognativex\", document, \"".esc_js($domain_option_value)."\");
+})(\"script\", \"cognativex\", document, \"" . esc_js($domain_option_value) . "\");
 </script>
 ";
         echo $tracker_script;
@@ -348,22 +348,22 @@ class CognativexPlugin
         //if we want to extend the classes to the taxonomy list in WordPress
         $classes[0] = ['key' => 'class1', 'mapping' => 'category', 'value' => "$post_categories"];
         $classes_json_encoded = json_encode($classes, JSON_UNESCAPED_UNICODE);
-//        $category_slugs = implode(',',array_column($post_categories, 'name'));
+        //        $category_slugs = implode(',',array_column($post_categories, 'name'));
         $meta_script_array = [
             "type" => "article",
-            "postid" =>  $post_data->ID,
-            "title" =>  $post_data->post_title,
-            "url" => $post_data->guid ,
-            "keywords" =>  $tag_slugs_json,
-            "thumbnail" => $post_url ,
-            "lang" => $post_language_2_chars ,
-            "published_time" => $post_published_time ,
-            "last_updated" => $post_last_updated ,
-            "description" => $post_content ,
-            "author" => $user_full_name ,
-            "classes" =>  $classes
+            "postid" => $post_data->ID,
+            "title" => $post_data->post_title,
+            "url" => $post_data->guid,
+            "keywords" => $tag_slugs_json,
+            "thumbnail" => $post_url,
+            "lang" => $post_language_2_chars,
+            "published_time" => $post_published_time,
+            "last_updated" => $post_last_updated,
+            "description" => $post_content,
+            "author" => $user_full_name,
+            "classes" => $classes
         ];
-        $meta_script = '<script id="cognativex-metadata" type="text/cognativex">' . json_encode($meta_script_array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE |JSON_UNESCAPED_SLASHES).'</script>';
+        $meta_script = '<script id="cognativex-metadata" type="text/cognativex">' . json_encode($meta_script_array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
         echo $meta_script;
     }
 
@@ -377,6 +377,39 @@ if (class_exists("CognativexPlugin")) {
     die("Error loading Class");
 }
 
+function create_publisher()
+{
+    // if ($test = 1){
+    //     return '';
+    // }
+    $site_settings = [];
+    $admin_email = get_bloginfo("admin_email");
+    $site_url = parse_url(get_bloginfo("url"))['host'];
+    $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-publisher-create';
+    // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
+
+    $response = wp_remote_post(
+        $request_url,
+        array(
+            'method' => 'POST',
+            'timeout' => 45,
+            'redirection' => 0,
+            'headers' => array(
+                'accept-encoding' => 'deflate, gzip, br'
+            ),
+            'body' => "data={\"domain\":\"$site_url\",\"portalEmail\":\"$admin_email\",\"portalPassword\":\"\"}"
+        )
+    );
+    var_dump($response);
+    if (isset(json_decode($response['body'])->publisherId)) {
+        $widget_ids = json_decode($response['body'])->bottomTemplateWidgetId . ',' . json_decode($response['body'])->popupWidgetId;
+        update_option("wp_cognativex_domain_setting", $site_url);
+        update_option("wp_cognativex_widget_ids_setting", $widget_ids);
+        update_option('wp_cognativex_plugin_notice', 'success-A publisher has been successfully created for this instance');
+
+    }
+    return $response;
+}
 //these events fire functions in the plugin
 // activation
 register_activation_hook(__FILE__, array($cognativexPlugin, 'activate'));
@@ -384,6 +417,3 @@ register_activation_hook(__FILE__, array($cognativexPlugin, 'activate'));
 register_deactivation_hook(__FILE__, array($cognativexPlugin, 'activate'));
 //uninstall
 //register_uninstall_hook(__FILE__, array($cognativexPlugin, 'uninstall'));
-
-
-
