@@ -177,7 +177,8 @@ class CognativexPlugin
 
         register_setting(
             'wp_cognativex_general_settings',
-            'wp_cognativex_domain_setting'
+            'wp_cognativex_domain_setting',
+            array($this, 'validate_domain_setting')
         );
         add_settings_section(
             // ID used to identify this section and with which to register options
@@ -218,6 +219,75 @@ class CognativexPlugin
 
     }
 
+    //this function will check for publisher ID, if existing, then the publisher appdomain is updated. else, the publisher is created
+    public function validate_domain_setting($domain)
+    {
+
+        $current_domain = get_option('wp_cognativex_domain_setting');
+        if ($current_domain == $domain) {
+            return $domain;
+        } else {
+            $publisher_id = get_option('wp_cognativex_publisher_id_setting');
+            if (isset($publisher_id)) {
+                //this means that the update appdomain is to be used
+                $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-update-domain';
+                // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
+
+                $response = wp_remote_post(
+                    $request_url,
+                    array(
+                        'method' => 'POST',
+                        'timeout' => 45,
+                        'redirection' => 0,
+                        'headers' => array(
+                            'accept-encoding' => 'deflate, gzip, br'
+                        ),
+                        'body' => "data={\"id\":\"$publisher_id\",\"newDomain\":\"$domain\"}"
+                    )
+                );
+
+                if (isset($response['publisherId'])) {
+                    update_option('wp_cognativex_publisher_id_active', 'success-domain has been succesfully updated');
+                    return $domain;
+                } else {
+                    update_option('wp_cognativex_publisher_id_active', 'error-An error has occured while trying to update the domain');
+                    return $current_domain;
+                }
+            } else {
+                $admin_email = get_bloginfo("admin_email");
+                $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-publisher-create';
+                // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
+
+                $response = wp_remote_post(
+                    $request_url,
+                    array(
+                        'method' => 'POST',
+                        'timeout' => 45,
+                        'redirection' => 0,
+                        'headers' => array(
+                            'accept-encoding' => 'deflate, gzip, br'
+                        ),
+                        'body' => "data={\"domain\":\"$domain\",\"portalEmail\":\"$admin_email\",\"portalPassword\":\"\"}"
+                    )
+                );
+
+                if (isset(json_decode($response['body'])->publisherId)) {
+                    $widget_ids = json_decode($response['body'])->bottomTemplateWidgetId . ',' . json_decode($response['body'])->popupWidgetId;
+                    $publisher_id = json_decode($response['body'])->publisher_id;
+                    update_option("wp_cognativex_publisher_id_setting", $publisher_id);
+                    update_option("wp_cognativex_domain_setting", $domain);
+                    update_option("wp_cognativex_widget_ids_setting", $widget_ids);
+                    update_option('wp_cognativex_plugin_notice', 'success-A publisher has been successfully created for this instance');
+                    return $domain;
+                } else {
+                    update_option('wp_cognativex_publisher_id_active', 'error-An error has occured while trying to create a publisher');
+                    return $current_domain;
+                }
+
+            }
+        }
+
+    }
     public function wp_cognativex_display_general_account()
     {
         echo __('<p>Please fill the following settings for the plugin to function properly; ex : example.com</p>', 'cognativex');
@@ -257,7 +327,7 @@ class CognativexPlugin
                     $min = (isset($args['min'])) ? 'min="' . $args['min'] . '"' : '';
                     $max = (isset($args['max'])) ? 'max="' . $args['max'] . '"' : '';
                     if (isset($args['disabled'])) {
-                        // hide the actual input bc if it was just a disabled input, the informaiton saved in the database would be wrong - bc it would pass empty values and wipe the actual information
+                        // hide the actual input bc if it was just a disabled input, the information saved in the database would be wrong - bc it would pass empty values and wipe the actual information
                         echo '<input type="' . esc_attr($args['subtype']) . '" id="' . esc_attr($args['id']) . '_disabled" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '_disabled" size="40" disabled value="' . esc_attr($value) . '" /><input type="hidden" id="' . esc_attr($args['id']) . '" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '" size="40" value="' . esc_attr($value) . '" />';
                     } else {
                         echo '<input type="' . esc_attr($args['subtype']) . '" id="' . esc_attr($args['id']) . '" "' . esc_attr($args['required']) . '" ' . esc_attr($step) . ' ' . esc_attr($max) . ' ' . esc_attr($min) . ' name="' . esc_attr($args['name']) . '" size="40" value="' . esc_attr($value) . '" />';
@@ -383,8 +453,8 @@ function create_publisher()
     //     return '';
     // }
     $site_settings = [];
-    $admin_email = get_bloginfo("admin_email");
     $site_url = parse_url(get_bloginfo("url"))['host'];
+    $admin_email = get_bloginfo("admin_email");
     $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-publisher-create';
     // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
 
@@ -400,12 +470,14 @@ function create_publisher()
             'body' => "data={\"domain\":\"$site_url\",\"portalEmail\":\"$admin_email\",\"portalPassword\":\"\"}"
         )
     );
-    var_dump($response);
     if (isset(json_decode($response['body'])->publisherId)) {
         $widget_ids = json_decode($response['body'])->bottomTemplateWidgetId . ',' . json_decode($response['body'])->popupWidgetId;
+        $publisher_id = json_decode($response['body'])->publisher_id;
+        update_option("wp_cognativex_publisher_id_setting", $publisher_id);
         update_option("wp_cognativex_domain_setting", $site_url);
         update_option("wp_cognativex_widget_ids_setting", $widget_ids);
         update_option('wp_cognativex_plugin_notice', 'success-A publisher has been successfully created for this instance');
+        update_option('wp_cognativex_publisher_id_active', 'success-A publisher exists with the ID: ' . $publisher_id . ' and thus, the domain input is disabled');
 
     }
     return $response;

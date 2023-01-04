@@ -1,18 +1,4 @@
 <?php
-
-/**
- * Provide a admin area view for the plugin
- *
- * This file is used to markup the admin-facing aspects of the plugin.
- *
- * @link       plugin_name.com/team
- * @since      1.0.0
- *
- * @package    PluginName
- * @subpackage PluginName/admin/partials
- */
-?>
-<?php
 if (get_option('wp_cognativex_plugin_notice')) {
 
     $message = explode('-', get_option('wp_cognativex_plugin_notice'), 2);
@@ -26,6 +12,24 @@ if (get_option('wp_cognativex_plugin_notice')) {
     </div>
     <?php
     delete_option('wp_cognativex_plugin_notice');
+
+}
+?>
+
+
+<?php
+if (get_option('wp_cognativex_publisher_id_active')) {
+
+    $message = explode('-', get_option('wp_cognativex_publisher_id_active'), 2);
+    $message_type = $message[0];
+    $message_content = $message[1];
+    ?>
+    <div class="notice notice-<?php echo $message_type; ?>">
+        <p>
+            <?php echo $message_content; ?>
+        </p>
+    </div>
+    <?php
 
 }
 ?>
