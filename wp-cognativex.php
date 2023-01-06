@@ -7,12 +7,12 @@
  *
  *  Plugin Name:       CognativeX – The Best AI tool for Audience Growth & Engagement| Personalise your content experience
  *  Plugin URI:        https://github.com/cognativex/cx-wp-plugin
- *  Version:           1.1.2
+ *  Version:           2.0
  *  Description:       CognativeX Integration Plugin to enable tracking, widgets, and AD placement
  *  Author:            CognativeX
  *  Text Domain:       cognativex
  *  Requires PHP:      5.6
- *  Tested up to:      6.0
+ *  Tested up to:      6.1
  *  Requires at least: 5.0
  *  Author URI:        https://cognativex.com
  *  License:           GPLv2 or later
@@ -44,7 +44,7 @@ class CognativexPlugin
 
     public $plugin_name = "wp-cognativex";
     public $plugin_title = "CognativeX Plugin";
-    public $plugin_version = "1.1.2";
+    public $plugin_version = "2.0";
 
 
     public $add_something_nonce;
