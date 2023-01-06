@@ -11,7 +11,9 @@ if (get_option('wp_cognativex_plugin_notice')) {
         </p>
     </div>
     <?php
-    delete_option('wp_cognativex_plugin_notice');
+    if ($message_type != "error"){
+        delete_option('wp_cognativex_plugin_notice');
+    }
 
 }
 ?>

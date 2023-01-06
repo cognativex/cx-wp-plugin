@@ -133,11 +133,6 @@ class CognativexPlugin
         );
     }
 
-    public function testEchoIntoHead()
-    {
-        echo "<script>alert('test')</script>";
-    }
-
     public function registerAndBuildFields()
     {
         /**
@@ -246,8 +241,10 @@ class CognativexPlugin
                     )
                 );
 
-                if (isset($response['publisherId'])) {
+                if (isset(json_decode($response['body'])->publisherId)) {
+                    $publisher_id = json_decode($response['body'])->publisherId;
                     update_option('wp_cognativex_publisher_id_active', 'success-domain has been succesfully updated');
+                    update_option('wp_cognativex_publisher_id_active', 'success-Plugin is Active, and your publisher ID is: ' . $publisher_id);
                     return $domain;
                 } else {
                     update_option('wp_cognativex_publisher_id_active', 'error-An error has occured while trying to update the domain');
@@ -278,6 +275,8 @@ class CognativexPlugin
                     update_option("wp_cognativex_domain_setting", $domain);
                     update_option("wp_cognativex_widget_ids_setting", $widget_ids);
                     update_option('wp_cognativex_plugin_notice', 'success-A publisher has been successfully created for this instance');
+                    update_option('wp_cognativex_publisher_id_active', 'success-Plugin is Active, and your publisher ID is: ' . $publisher_id);
+                    
                     return $domain;
                 } else {
                     update_option('wp_cognativex_publisher_id_active', 'error-An error has occured while trying to create a publisher');
@@ -470,16 +469,33 @@ function create_publisher()
             'body' => "data={\"domain\":\"$site_url\",\"portalEmail\":\"$admin_email\",\"portalPassword\":\"\"}"
         )
     );
+    delete_option('wp_cognativex_publisher_id_active');
+
     if (isset(json_decode($response['body'])->publisherId)) {
         $widget_ids = json_decode($response['body'])->bottomTemplateWidgetId . ',' . json_decode($response['body'])->popupWidgetId;
-        $publisher_id = json_decode($response['body'])->publisher_id;
+        $publisher_id = json_decode($response['body'])->publisherId;
         update_option("wp_cognativex_publisher_id_setting", $publisher_id);
         update_option("wp_cognativex_domain_setting", $site_url);
         update_option("wp_cognativex_widget_ids_setting", $widget_ids);
         update_option('wp_cognativex_plugin_notice', 'success-A publisher has been successfully created for this instance');
-        update_option('wp_cognativex_publisher_id_active', 'success-A publisher exists with the ID: ' . $publisher_id . ' and thus, the domain input is disabled');
+        update_option('wp_cognativex_publisher_id', $publisher_id);
+        update_option('wp_cognativex_publisher_id_active', 'success-Plugin is Active, and your publisher ID is: ' . $publisher_id);
 
+    } elseif (isset(json_decode($response['body'])->exception)) {
+        $exception_details = explode('-', (json_decode($response['body'])->exception));
+        if ($exception_details[0] == 'duplicate') {
+            $publisher_id = $exception_details[2];
+            delete_option('wp_cognativex_plugin_notice');
+            update_option('wp_cognativex_publisher_id', $publisher_id);
+            update_option('wp_cognativex_publisher_id_active', 'success-Plugin is Active, and your publisher ID is: ' . $publisher_id);
+        } else {
+            update_option('wp_cognativex_plugin_notice', 'error- an error has occured');
+        }
     }
+    // {
+    // "exception": "duplicate-appdomain-5750852904026112",
+    // "api": "/wordpress-publisher-create"
+// }
     return $response;
 }
 //these events fire functions in the plugin
