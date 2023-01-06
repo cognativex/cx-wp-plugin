@@ -27,20 +27,20 @@ Because of our superior personalisation, on average our clients have:
 
 Get started now and find out how Artificial Intelligence can grow your audience engagement and revenues!
 
-To join please install our plugin and [fill out the following form to receive the required widget IDs](https://share.hsforms.com/1miyHTpuIRkOdukMtvlz5MQ3i03r). You can also contact [sales@cognativex.com](mailto:sales@cognativex.com) and a representative from our sales team will reach out and help with onboarding your website.
+To join please install and activate our plugin, this will perform an auto-onboarding process, where a publisher is created for you, and widgets that can be used to explore the benefits of CognativeX Engine
 
 Get started in 4 easy steps:
 1.	Install the CognativeX Plugin
 2.	Activate Plugin
-3.	Fill in the Widget IDs provided to you by your account manager
-4.	Place widgets where you want them to appear
+3.	Place widgets where you want them to appear
 
 It’s that easy, now you’re personalising your content experience for your users!
 
 ## Features 
 
-1. Add the Tracker, metadata, and widget header scripts automatically to all published pages
-2. Enable the addition of the CognativeX block for widget rendering (***Supported From WordPress 5.8 and up***)
+1. Create a publisher account for you to use
+2. Add the Tracker, metadata, and widget header scripts automatically to all published pages
+3. Enable the addition of the CognativeX block for widget rendering (***Supported From WordPress 5.8 and up***)
 
 <i>NOTE: For installations still running 5.7 or less, the Widget script needs to be added as HTML. Check the Installation section for more details</i>
 
@@ -50,6 +50,8 @@ It’s that easy, now you’re personalising your content experience for your us
   * Plugin Creation
 - **1.1** :
   * Enhanced Scripts and performace
+  **2.0** :
+  * Include auto-onboarding feature
 
 ## Installation 
 
@@ -57,10 +59,8 @@ Installing CognativeX WordPress plugin and integrating with our platform is a si
 
 - Go to Plugins and Press Add new
 - Search for "CognativeX"
-- Press Install and then press Activate
-- To fill the settings please navigate to Settings > cognativex
-- fill the domain area with your domain. ex : example.com
-- fill the widgetIDs area with the widget IDs sent to you by your account manager. ex: 123456789,9876543210 <i>If you do not have your widgetIDs yet, please [fill out the following form to receive the required widget IDs](https://share.hsforms.com/1miyHTpuIRkOdukMtvlz5MQ3i03r) </i>
+- Press Install and then press Activate (This will automatically create a publisher that you can benefit from)
+- To check or modify the settings please navigate to Settings > cognativex
 - Add the widget block to your pages as per the screenshots
 - Enjoy the power of AI and personalization
 
