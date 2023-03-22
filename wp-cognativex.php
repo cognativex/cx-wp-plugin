@@ -60,6 +60,7 @@ class CognativexPlugin
 
     }
 
+    
     public function create_cx_widget_block()
     {
         register_block_type(__DIR__ . '/build');
