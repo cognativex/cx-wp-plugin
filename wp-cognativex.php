@@ -51,6 +51,11 @@ class CognativexPlugin
     public $ajax_url;
     public $user_id;
 
+    //this is the dev url
+    // public $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
+
+    public $api_url = "https://cx-portal-api-dot-cognativex-api.nw.r.appspot.com/";
+
     public function __construct()
     {
         add_action('init', array($this, 'create_cx_widget_block'));
@@ -226,7 +231,7 @@ class CognativexPlugin
             $publisher_id = get_option('wp_cognativex_publisher_id_setting');
             if (isset($publisher_id)) {
                 //this means that the update appdomain is to be used
-                $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-update-domain';
+                $request_url = $this->api_url . 'wordpress-update-domain';
                 // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
 
                 $response = wp_remote_post(
@@ -253,7 +258,7 @@ class CognativexPlugin
                 }
             } else {
                 $admin_email = get_bloginfo("admin_email");
-                $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-publisher-create';
+                $request_url = $this->api_url . 'wordpress-publisher-create';
                 // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
 
                 $response = wp_remote_post(
@@ -449,14 +454,20 @@ if (class_exists("CognativexPlugin")) {
 
 function create_publisher()
 {
+    
+    //this is the dev url
+    // $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
+
+    $api_url = "https://cx-portal-api-dot-cognativex-api.nw.r.appspot.com/";
+
     // if ($test = 1){
     //     return '';
     // }
     $site_settings = [];
     $site_url = parse_url(get_bloginfo("url"))['host'];
     $admin_email = get_bloginfo("admin_email");
-    $request_url = 'https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/wordpress-publisher-create';
-    // $request_url = 'https://webhook.site/017f71b7-bb13-4484-9a94-54c05acd3726';
+    $request_url = $api_url . 'wordpress-publisher-create';
+    // $request_url = 'https://webhook.site/cf395f0d-3b21-422f-ba72-d8abd32b2490';
 
     $response = wp_remote_post(
         $request_url,
