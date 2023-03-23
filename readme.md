@@ -50,7 +50,7 @@ It’s that easy, now you’re personalising your content experience for your us
   * Plugin Creation
 - **1.1** :
   * Enhanced Scripts and performace
-  **2.0** :
+- **2.0** :
   * Include auto-onboarding feature
 
 ## Installation 
