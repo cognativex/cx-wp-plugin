@@ -5,7 +5,7 @@ Contributors: cognativex
 Tags: Personalisation, Recommendation, Data & Analytics, Artificial Intelligence, Media, Personalization, Content,  News, Blog, Audience Growth, Retention, Bounce Rate<br>
 Requires at least: 5.0
 Tested up to: 6.1
-Stable tag: 2.0
+Stable tag: 2.0.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
