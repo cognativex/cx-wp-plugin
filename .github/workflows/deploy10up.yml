@@ -23,4 +23,4 @@ jobs:
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SLUG: cognativex
-        VERSION: 2.0
+        VERSION: 2.0.1
