@@ -229,8 +229,6 @@ class CognativexPlugin
             return $domain;
         } else {
             $publisher_id = get_option('wp_cognativex_publisher_id_setting');
-            echo('batata');
-            var_dump($publisher_id);
             if ($publisher_id) {
                 //this means that the update appdomain is to be used
                 $request_url = $this->api_url . 'wordpress-update-domain';
