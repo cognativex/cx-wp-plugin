@@ -490,7 +490,6 @@ function create_publisher()
         update_option("wp_cognativex_domain_setting", $site_url);
         update_option("wp_cognativex_widget_ids_setting", $widget_ids);
         update_option('wp_cognativex_plugin_notice', __('success-A publisher has been successfully created for this instance'));
-        update_option('wp_cognativex_publisher_id', $publisher_id);
         update_option('wp_cognativex_publisher_id_active', __('success-Plugin is Active, and your publisher ID is: ') . $publisher_id);
 
     } elseif (isset(json_decode($response['body'])->exception)) {
@@ -498,7 +497,7 @@ function create_publisher()
         if ($exception_details[0] == 'duplicate') {
             $publisher_id = $exception_details[2];
             delete_option('wp_cognativex_plugin_notice');
-            update_option('wp_cognativex_publisher_id', $publisher_id);
+            update_option('wp_cognativex_publisher_id_setting', $publisher_id);
             update_option('wp_cognativex_publisher_id_active', __('success-Plugin is Active, and your publisher ID is: ') . $publisher_id);
         } else {
             update_option('wp_cognativex_plugin_notice', __('error- an error has occured'));
