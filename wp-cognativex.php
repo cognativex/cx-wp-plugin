@@ -54,7 +54,7 @@ class CognativexPlugin
     //this is the dev url
     // public $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
 
-    public $api_url = "https://cx-portal-api-dot-cognativex-api.nw.r.appspot.com/";
+    public $api_url = "https://apis.cognativex.com/";
 
     public function __construct()
     {
@@ -458,7 +458,7 @@ function create_publisher()
     //this is the dev url
     // $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
 
-    $api_url = "https://cx-portal-api-dot-cognativex-api.nw.r.appspot.com/";
+    $api_url = "https://apis.cognativex.com/";
 
     // if ($test = 1){
     //     return '';
