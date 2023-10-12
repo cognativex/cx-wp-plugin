@@ -7,7 +7,7 @@
  *
  *  Plugin Name:       CognativeX – The Best AI tool for Audience Growth & Engagement| Personalise your content experience
  *  Plugin URI:        https://github.com/cognativex/cx-wp-plugin
- *  Version:           2.0.5
+ *  Version:           2.1.1
  *  Description:       CognativeX Integration Plugin to enable tracking, widgets, and AD placement
  *  Author:            CognativeX
  *  Text Domain:       cognativex
@@ -44,7 +44,7 @@ class CognativexPlugin
 
     public $plugin_name = "wp-cognativex";
     public $plugin_title = "CognativeX Plugin";
-    public $plugin_version = "2.0.5";
+    public $plugin_version = "2.1.1";
 
 
     public $add_something_nonce;
@@ -54,14 +54,14 @@ class CognativexPlugin
     //this is the dev url
     // public $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
 
-    public $api_url = "https://apis.cognativex.com/";
+    public $api_url = "https://api-platform.cognativex.com/";
 
     public function __construct()
     {
         add_action('init', array($this, 'create_cx_widget_block'));
         add_action('admin_menu', array($this, 'addPluginSettingsMenu'));
         add_action('admin_init', array($this, 'registerAndBuildFields'));
-
+        add_action('wp_footer',  'append_popup_widget');
 
     }
 
@@ -452,13 +452,20 @@ if (class_exists("CognativexPlugin")) {
     die("Error loading Class");
 }
 
+function append_popup_widget(){
+    $popup_widget_id = get_option('wp_cognativex_popup_widget_id');
+    if (isset($popup_widget_id)){
+    echo '<div id="cognativex-widget-'.$popup_widget_id.'"></div>';
+    }
+}
+
 function create_publisher()
 {
     
     //this is the dev url
     // $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
 
-    $api_url = "https://apis.cognativex.com/";
+    $api_url = "https://api-platform.cognativex.com/";
 
     // if ($test = 1){
     //     return '';
@@ -483,12 +490,15 @@ function create_publisher()
     );
     delete_option('wp_cognativex_publisher_id_active');
 
-    if (isset(json_decode($response['body'])->publisherId)) {
-        $widget_ids = json_decode($response['body'])->bottomTemplateWidgetId . ',' . json_decode($response['body'])->popupWidgetId;
-        $publisher_id = json_decode($response['body'])->publisherId;
+    if (isset(json_decode($response['body'])->data->publisherId)) {
+        $popup_widget_id = json_decode($response['body'])->data->popupWidgetId;
+        $bottom_widget_id = json_decode($response['body'])->data->bottomTemplateWidgetId;
+        $widget_ids =  $bottom_widget_id . ',' . $popup_widget_id;
+        $publisher_id = json_decode($response['body'])->data->publisherId;
         update_option("wp_cognativex_publisher_id_setting", $publisher_id);
         update_option("wp_cognativex_domain_setting", $site_url);
         update_option("wp_cognativex_widget_ids_setting", $widget_ids);
+        update_option("wp_cognativex_popup_widget_id", $popup_widget_id);
         update_option('wp_cognativex_plugin_notice', __('success-A publisher has been successfully created for this instance'));
         update_option('wp_cognativex_publisher_id_active', __('success-Plugin is Active, and your publisher ID is: ') . $publisher_id);
 
