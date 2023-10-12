@@ -490,11 +490,11 @@ function create_publisher()
     );
     delete_option('wp_cognativex_publisher_id_active');
 
-    if (isset(json_decode($response['body'])->publisherId)) {
-        $popup_widget_id = json_decode($response['body'])->popupWidgetId;
-        $bottom_widget_id = json_decode($response['body'])->bottomTemplateWidgetId;
+    if (isset(json_decode($response['body'])->data->publisherId)) {
+        $popup_widget_id = json_decode($response['body'])->data->popupWidgetId;
+        $bottom_widget_id = json_decode($response['body'])->data->bottomTemplateWidgetId;
         $widget_ids =  $bottom_widget_id . ',' . $popup_widget_id;
-        $publisher_id = json_decode($response['body'])->publisherId;
+        $publisher_id = json_decode($response['body'])->data->publisherId;
         update_option("wp_cognativex_publisher_id_setting", $publisher_id);
         update_option("wp_cognativex_domain_setting", $site_url);
         update_option("wp_cognativex_widget_ids_setting", $widget_ids);
