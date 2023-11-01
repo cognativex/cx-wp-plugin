@@ -93,7 +93,6 @@ Some of our clients who have seen our impact first-hand include:
 •	Emaratalyoum.com
 •	kooora.com
 •	Btolat.com
-•	Ajel.sa
 and many other premium websites in the region.
 
 With a strong focus on audience engagement, content, and revenue, CognativeX has become the leading AI partner for media companies.
