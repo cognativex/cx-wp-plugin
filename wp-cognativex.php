@@ -61,11 +61,13 @@ class CognativexPlugin
         add_action('init', array($this, 'create_cx_widget_block'));
         add_action('admin_menu', array($this, 'addPluginSettingsMenu'));
         add_action('admin_init', array($this, 'registerAndBuildFields'));
-        add_action('wp_footer',  'append_popup_widget');
+        //appending popup widget to the footer
+        add_action('wp_footer', 'append_popup_widget');
+        //appending onexit widget to the footer
+        add_action('wp_footer', 'append_onexit_widget');
 
     }
 
-    
     public function create_cx_widget_block()
     {
         register_block_type(__DIR__ . '/build');
@@ -103,8 +105,6 @@ class CognativexPlugin
     }
 
 
-
-
     public function addPluginSettingsMenu()
     {
         add_options_page("cognativex-settings", "Cognativex", 'administrator', 'cognativex-settings', array($this, 'displayPluginAdminSettings'));
@@ -138,6 +138,12 @@ class CognativexPlugin
             $type
         );
     }
+///function to description to the widget checkbox settings
+    public function wp_cognativex_widget_checkbox_description()
+    {
+        echo __('<p>You can enable the widgets here</p>', 'cognativex');
+
+    }
 
     public function registerAndBuildFields()
     {
@@ -146,78 +152,201 @@ class CognativexPlugin
          * Second, add_settings_field
          * Third, register_setting
          */
+//        add_settings_section(
+//        // ID used to identify this section and with which to register options
+//            'wp_cognativex_general_section',
+//            // Title to be displayed on the administration page
+//            'Basic Configurations',
+//            // Callback used to render the description of the section
+//            array($this, 'wp_cognativex_display_general_account'),
+//            // Page on which to add this section of options
+//            'wp_cognativex_general_settings'
+//        );
+//
+//        unset($args);
+//        $args = array(
+//            'type' => 'input',
+//            'subtype' => 'text',
+//            'id' => 'wp_cognativex_domain_setting',
+//            'name' => 'wp_cognativex_domain_setting',
+//            'required' => 'true',
+//            'get_options_list' => '',
+//            'value_type' => 'normal',
+//            'wp_data' => 'option'
+//        );
+//        add_settings_field(
+//            'wp_cognativex_domain_setting',
+//            __('Domain', 'cognativex'),
+//            array($this, 'wp_cognativex_render_settings_field'),
+//            'wp_cognativex_general_settings',
+//            'wp_cognativex_general_section',
+//            $args
+//        );
+//
+//        register_setting(
+//            'wp_cognativex_general_settings',
+//            'wp_cognativex_domain_setting',
+//            array($this, 'validate_domain_setting')
+//        );
+
+//        add_settings_section(
+//        // ID used to identify this section and with which to register options
+//            'wp_cognativex_widget_section',
+//            // Title to be displayed on the administration page
+//            'Widget Settings',
+//            // Callback used to render the description of the section
+//            array($this, 'wp_cognativex_display_widget_account'),
+//            // Page on which to add this section of options
+//            'wp_cognativex_general_settings'
+//        );
+//        unset($args);
+//        $args = array(
+//            'type' => 'input',
+//            'subtype' => 'text',
+//            'id' => 'wp_cognativex_widget_ids_setting',
+//            'name' => 'wp_cognativex_widget_ids_setting',
+//            'required' => 'required',
+//            'help_text' => 'widget id sent by CognativeX',
+//            'get_options_list' => '',
+//            'value_type' => 'normal',
+//            'wp_data' => 'option'
+//        );
+//        add_settings_field(
+//            'wp_cognativex_widget_ids_setting',
+//            __('Widget IDs', 'cognativex'),
+//            array($this, 'wp_cognativex_render_settings_field'),
+//            'wp_cognativex_general_settings',
+//            'wp_cognativex_widget_section',
+//            $args
+//        );
+//
+//        register_setting(
+//            'wp_cognativex_general_settings',
+//            'wp_cognativex_widget_ids_setting'
+//        );
+////my code
+/// first widget
+//        add_settings_section(
+//        // ID used to identify this section and with which to register options
+//            'wp_cognativex_widget_checkbox_setting',
+//            // Title to be displayed on the administration page
+//            'Widgets Appearance',
+//            // Callback used to render the description of the section
+//            array($this, 'wp_cognativex_widget_checkbox'),
+//            // Page on which to add this section of options
+//            'wp_cognativex_general_settings'
+//        );
+//        unset($args);
+//        $args = array(
+//            'type' => 'input',
+//            'subtype' => 'checkbox',
+//            'id' => 'wp_cognativex_widget_checkbox',
+//            'name' => 'wp_cognativex_widget_checkbox',
+//            'required' => 'true',
+//            'get_options_list' => '',
+//            'value_type' => 'normal',
+//            'wp_data' => 'option'
+//        );
+//        add_settings_field(
+//            'wp_cognativex_widget_checkbox',
+//            __('Enable Widget', 'cognativex'),
+//            array($this, 'wp_cognativex_render_settings_field'),
+//            'wp_cognativex_general_settings',
+//            'wp_cognativex_widget_checkbox_setting',
+//            $args
+//        );
+//
+//
+//        register_setting(
+//            'wp_cognativex_general_settings',
+//            'wp_cognativex_widget_checkbox'
+//        );
+        //adding widgets settings section
         add_settings_section(
-            // ID used to identify this section and with which to register options
-            'wp_cognativex_general_section',
+        // ID used to identify this section and with which to register options
+            'wp_cognativex_widget_checkbox_setting',
             // Title to be displayed on the administration page
-            'Basic Configurations',
+            'Widgets Checkbox',
             // Callback used to render the description of the section
-            array($this, 'wp_cognativex_display_general_account'),
+            array($this, 'wp_cognativex_widget_checkbox_description'),
             // Page on which to add this section of options
             'wp_cognativex_general_settings'
         );
+        ///adding the pop up widget checkbox
         unset($args);
         $args = array(
             'type' => 'input',
-            'subtype' => 'text',
-            'id' => 'wp_cognativex_domain_setting',
-            'name' => 'wp_cognativex_domain_setting',
+            'subtype' => 'checkbox',
+            'id' => 'wp_cognativex_widget_checkbox',
+            'name' => 'wp_cognativex_widget_checkbox',
             'required' => 'true',
             'get_options_list' => '',
             'value_type' => 'normal',
             'wp_data' => 'option'
         );
         add_settings_field(
-            'wp_cognativex_domain_setting',
-            __('Domain', 'cognativex'),
+            'wp_cognativex_widget_checkbox',
+            __('PopUp widget', 'cognativex'),
             array($this, 'wp_cognativex_render_settings_field'),
             'wp_cognativex_general_settings',
-            'wp_cognativex_general_section',
+            'wp_cognativex_widget_checkbox_setting',
             $args
         );
-
         register_setting(
             'wp_cognativex_general_settings',
-            'wp_cognativex_domain_setting',
-            array($this, 'validate_domain_setting')
+            'wp_cognativex_widget_checkbox'
         );
-        add_settings_section(
-            // ID used to identify this section and with which to register options
-            'wp_cognativex_widget_section',
-            // Title to be displayed on the administration page
-            'Widget Settings',
-            // Callback used to render the description of the section
-            array($this, 'wp_cognativex_display_widget_account'),
-            // Page on which to add this section of options
-            'wp_cognativex_general_settings'
-        );
-        unset($args);
-        $args = array(
+        ///adding on exit widget checkbox
+        unset($args2);
+        $args2 = array(
             'type' => 'input',
-            'subtype' => 'text',
-            'id' => 'wp_cognativex_widget_ids_setting',
-            'name' => 'wp_cognativex_widget_ids_setting',
-            'required' => 'required',
-            'help_text' => 'widget id sent by CognativeX',
+            'subtype' => 'checkbox',
+            'id' => 'wp_cognativex_widget_checkbox2',
+            'name' => 'wp_cognativex_widget_checkbox2',
+            'required' => 'true',
             'get_options_list' => '',
             'value_type' => 'normal',
             'wp_data' => 'option'
         );
         add_settings_field(
-            'wp_cognativex_widget_ids_setting',
-            __('Widget IDs', 'cognativex'),
+            'wp_cognativex_widget_checkbox2',
+            __('Onexit widget', 'cognativex'),
             array($this, 'wp_cognativex_render_settings_field'),
             'wp_cognativex_general_settings',
-            'wp_cognativex_widget_section',
-            $args
+            'wp_cognativex_widget_checkbox_setting',
+            $args2
         );
+        register_setting(
+            'wp_cognativex_general_settings',
+            'wp_cognativex_widget_checkbox2'
+        );
+        ///adding the field that takes the widgets id which is hidden
+        unset($args3);
+        $args3 = array(
+            'type' => 'input',
+            'subtype' => 'hidden',
+            'id' => 'wp_cognativex_widget_ids_setting',
+            'name' => 'wp_cognativex_widget_ids_setting',
+            'required' => 'true',
+            'get_options_list' => '',
+            'value_type' => 'normal',
+            'wp_data' => 'option'
+        );
+
+        add_settings_field(
+            'wp_cognativex_widget_ids_setting',
+            __('', 'cognativex'),
+            array($this, 'wp_cognativex_render_settings_field'),
+            'wp_cognativex_general_settings',
+            'wp_cognativex_widget_checkbox_setting',
+            $args3
+        );
+
 
         register_setting(
             'wp_cognativex_general_settings',
             'wp_cognativex_widget_ids_setting'
         );
-
-
     }
 
     //this function will check for publisher ID, if existing, then the publisher appdomain is updated. else, the publisher is created
@@ -282,7 +411,7 @@ class CognativexPlugin
                     update_option("wp_cognativex_widget_ids_setting", $widget_ids);
                     update_option('wp_cognativex_plugin_notice', __('success-A publisher has been successfully created for this instance'));
                     update_option('wp_cognativex_publisher_id_active', __('success-Plugin is Active, and your publisher ID is: ') . $publisher_id);
-                    
+
                     return $domain;
                 } else {
                     update_option('wp_cognativex_publisher_id_active', 'error-An error has occured while trying to create a publisher');
@@ -293,6 +422,7 @@ class CognativexPlugin
         }
 
     }
+
     public function wp_cognativex_display_general_account()
     {
         echo __('<p>Please fill the following settings for the plugin to function properly; ex : example.com</p>', 'cognativex');
@@ -322,7 +452,6 @@ class CognativexPlugin
         } elseif ($args['wp_data'] == 'post_meta') {
             $wp_data_value = get_post_meta($args['post_id'], $args['name'], true);
         }
-
         switch ($args['type']) {
 
             case 'input':
@@ -452,16 +581,34 @@ if (class_exists("CognativexPlugin")) {
     die("Error loading Class");
 }
 
-function append_popup_widget(){
-    $popup_widget_id = get_option('wp_cognativex_popup_widget_id');
-    if (isset($popup_widget_id)){
-    echo '<div id="cognativex-widget-'.$popup_widget_id.'"></div>';
+function append_popup_widget()
+{
+    $check_box_result = get_option('wp_cognativex_widget_checkbox');
+    if ($check_box_result == true) {
+        $popup_widget_id = get_option('wp_cognativex_popup_widget_id');
+        if (isset($popup_widget_id)) {
+            echo '<div id="cognativex-widget-' . $popup_widget_id . '"></div>';
+        }
     }
 }
 
+function append_onexit_widget()
+{
+    $check_box_result = get_option('wp_cognativex_widget_checkbox2');
+    if ($check_box_result == true) {
+        $onexit_widget_id = get_option('wp_cognativex_onexit_widget_id');
+        if (isset($onexit_widget_id)) {
+            echo '<div id="cognativex-widget-' . $onexit_widget_id . '"></div>';
+        }
+    }
+
+
+}
+
+
 function create_publisher()
 {
-    
+
     //this is the dev url
     // $api_url = "https://cx-portal-api-dot-cognativex-dev.ew.r.appspot.com/";
 
@@ -472,6 +619,7 @@ function create_publisher()
     // }
     $site_settings = [];
     $site_url = parse_url(get_bloginfo("url"))['host'];
+//    $site_url = "tawsiyat.net"; ///for local testing
     $admin_email = get_bloginfo("admin_email");
     $request_url = $api_url . 'wordpress-publisher-create';
     // $request_url = 'https://webhook.site/cf395f0d-3b21-422f-ba72-d8abd32b2490';
@@ -492,13 +640,14 @@ function create_publisher()
 
     if (isset(json_decode($response['body'])->data->publisherId)) {
         $popup_widget_id = json_decode($response['body'])->data->popupWidgetId;
-        $bottom_widget_id = json_decode($response['body'])->data->bottomTemplateWidgetId;
-        $widget_ids =  $bottom_widget_id . ',' . $popup_widget_id;
+        $onexit_widget_id = json_decode($response['body'])->data->bottomTemplateWidgetId;
+        $widget_ids = $onexit_widget_id . ',' . $popup_widget_id;
         $publisher_id = json_decode($response['body'])->data->publisherId;
         update_option("wp_cognativex_publisher_id_setting", $publisher_id);
         update_option("wp_cognativex_domain_setting", $site_url);
         update_option("wp_cognativex_widget_ids_setting", $widget_ids);
         update_option("wp_cognativex_popup_widget_id", $popup_widget_id);
+        update_option("wp_cognativex_onexit_widget_id", $onexit_widget_id);
         update_option('wp_cognativex_plugin_notice', __('success-A publisher has been successfully created for this instance'));
         update_option('wp_cognativex_publisher_id_active', __('success-Plugin is Active, and your publisher ID is: ') . $publisher_id);
 
@@ -519,6 +668,7 @@ function create_publisher()
 // }
     return $response;
 }
+
 //these events fire functions in the plugin
 // activation
 register_activation_hook(__FILE__, array($cognativexPlugin, 'activate'));
