@@ -1,4 +1,5 @@
 <?php
+require_once "charts.php";
 /*
  * @package   cognativex
  * @author    CognativeX
@@ -65,8 +66,35 @@ class CognativexPlugin
         add_action('wp_footer', 'append_popup_widget');
         //appending onexit widget to the footer
         add_action('wp_footer', 'append_onexit_widget');
+        ///adding CognativeX Analysis Menu
+        add_action('admin_menu', array($this, 'custom_dashboard_menu'));
 
     }
+
+    // Add custom menu item to the WordPress admin menu
+    public function custom_dashboard_menu()
+    {
+        add_menu_page(
+            'CX Analysis',   // Page title
+            'CX Analysis',   // Menu title
+            'manage_options',
+            'analysis',
+            array($this, 'custom_analytics_page_callback'),
+            'dashicons-chart-bar',
+            20
+        );
+    }
+
+    //
+    public function custom_analytics_page_callback()
+    {
+        $domain = get_option('wp_cognativex_domain_setting');
+        charts::design();
+        charts::getClicksWithDate($domain);
+
+
+    }
+
 
     public function create_cx_widget_block()
     {
@@ -138,6 +166,7 @@ class CognativexPlugin
             $type
         );
     }
+
 ///function to description to the widget checkbox settings
     public function wp_cognativex_widget_checkbox_description()
     {
