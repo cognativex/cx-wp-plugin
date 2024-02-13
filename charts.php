@@ -2,11 +2,13 @@
 
 class charts
 {
-    public static function design(){
+    public static function design()
+    {
 
         ?>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+              crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <div class="container">
@@ -82,6 +84,7 @@ class charts
             .analytics-section h5 {
                 margin-top: 0;
             }
+
             .analytics-data {
                 color: rgba(75, 192, 192, 1);
             }
@@ -97,7 +100,7 @@ class charts
             var domain = '<?php echo $domain; ?>';
             //         var domain='almayadeen.net';
             // Fetch data from the API
-            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-clicks_date_analysis?domain='+domain)
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-clicks_date_analysis?domain=' + domain)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -145,7 +148,9 @@ class charts
         </script>
         <?php
     }
-    public static function getPageViews($domain){
+
+    public static function getPageViews($domain)
+    {
         ?>
         <script>
             var pageViewsElement = document.getElementById("page_views");
@@ -170,7 +175,9 @@ class charts
         </script>
         <?php
     }
-    public static function getTotalClicks($domain){
+
+    public static function getTotalClicks($domain)
+    {
         ?>
         <script>
             var totalClicksElement = document.getElementById("total_clicks");
@@ -200,7 +207,9 @@ class charts
         </script>
         <?php
     }
-    public static function getImpressions($domain){
+
+    public static function getImpressions($domain)
+    {
         ?>
         <script>
             var impressionsElement = document.getElementById("impressions");
@@ -230,7 +239,9 @@ class charts
         </script>
         <?php
     }
-    public static function getCTR(){
+
+    public static function getCTR()
+    {
         ?>
         <script>
             var totalClicksElement = document.getElementById("total_clicks");
@@ -243,13 +254,13 @@ class charts
             };
 
             // Event listener for total clicks element
-            totalClicksElement.addEventListener('clicksElementUpdated', function() {
+            totalClicksElement.addEventListener('clicksElementUpdated', function () {
                 eventsDispatched.totalClicksUpdated = true;
                 checkEventsDispatched();
             });
 
             // Event listener for impressions element
-            impressionsElement.addEventListener('impressionsElementUpdated', function() {
+            impressionsElement.addEventListener('impressionsElementUpdated', function () {
                 eventsDispatched.impressionsUpdated = true;
                 checkEventsDispatched();
             });
@@ -259,13 +270,12 @@ class charts
                 if (eventsDispatched.totalClicksUpdated && eventsDispatched.impressionsUpdated) {
                     var clicks = totalClicksElement.textContent;
                     var impressions = impressionsElement.textContent;
-                    if(impressions==0){
-                        document.getElementById("CTR").textContent=0
-                    }else{
-                        var CTR=((clicks/impressions)*100).toFixed(2)
-                        document.getElementById("CTR").textContent=CTR+" %";
+                    if (impressions == 0) {
+                        document.getElementById("CTR").textContent = 0
+                    } else {
+                        var CTR = ((clicks / impressions) * 100).toFixed(2)
+                        document.getElementById("CTR").textContent = CTR + " %";
                     }
-
 
 
                 }
@@ -274,10 +284,61 @@ class charts
         <?php
     }
 
+    public static function getPageViewsWithDate($domain)
+    {
+        ?>
+        <script>
+            var domain = '<?php echo $domain; ?>';
+            // Fetch data from the API
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-page_views_date_analysis?domain=' + domain)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(jsonResponse => {
+                    // Process the JSON data
+                    const daysArray = [];
+                    const pageViewArray = [];
+
+                    jsonResponse.forEach(item => {
+                        daysArray.push(item.day);
+                        pageViewArray.push(item.pageViews);
+                    });
 
 
+                    // Update the chart data
+                    const ctx2 = document.getElementById('myChart2').getContext('2d');
+                    const myChart2 = new Chart(ctx2, {
+                        type: 'bar',
+                        data: {
+                            labels: daysArray,
+                            datasets: [{
+                                label: 'Page Views',
+                                data: pageViewArray,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
 
 
+        </script>
+        <?php
+    }
 
 
 }
