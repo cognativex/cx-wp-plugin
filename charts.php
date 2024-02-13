@@ -16,26 +16,26 @@ class charts
             <div class="row justify-content-center mt-5">
                 <div class="col-md-3">
                     <div class="analytics-section">
-                        <h5>Page Views</h5>
-                        <div id="page_views"></div>
+                        <h5>Page Views </h5>
+                        <h5 id="page_views" class="analytics-data"></h5>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="analytics-section">
-                        <h5>Total Clicks</h5>
-                        <div id="total_clicks"></div>
+                        <h5>Total Clicks </h5>
+                        <h5 id="total_clicks" class=analytics-data></h5>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="analytics-section">
-                        <h5>Visitors</h5>
-                        <p>Total Visitors: 700</p>
+                        <h5>Impressions</h5>
+                        <h5 id="impressions" class=analytics-data></h5>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="analytics-section">
-                        <h5>Conversions</h5>
-                        <p>Total Conversions: 200</p>
+                        <h5>data</h5>
+                        <p>data</p>
                     </div>
                 </div>
             </div>
@@ -81,6 +81,9 @@ class charts
 
             .analytics-section h5 {
                 margin-top: 0;
+            }
+            .analytics-data {
+                color: rgba(75, 192, 192, 1);
             }
         </style>
 
@@ -190,7 +193,30 @@ class charts
         </script>
         <?php
     }
+    public static function getImpressions($domain){
+        ?>
+        <script>
+            var impressionsElement = document.getElementById("impressions");
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-impressions?domain=' + domain)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(jsonResponse => {
+                    // Accessing the single value from the JSON response
+                    var impressions = jsonResponse;
 
+                    // Now you can use the pageViews variable to do whatever you need with the value
+                    impressionsElement.textContent = impressions;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        </script>
+        <?php
+    }
 
 
 

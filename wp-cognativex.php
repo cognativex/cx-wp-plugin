@@ -98,6 +98,8 @@ class CognativexPlugin
         charts::getPageViews($domain);
         //get total clicks
         charts::getTotalClicks($domain);
+        //get impressions
+        charts::getImpressions($domian);
 
 
     }
