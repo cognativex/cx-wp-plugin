@@ -85,12 +85,16 @@ class CognativexPlugin
         );
     }
 
-    //
+    //Page Content
     public function custom_analytics_page_callback()
     {
         $domain = get_option('wp_cognativex_domain_setting');
+        //get the html and css code
         charts::design();
-        charts::getClicksWithDate($domain);
+        //get clicksWithClicks dashboard
+        charts::getClicksWithDate('almayadeen.net');
+        //get total page views
+        charts::getPageViews("almayadeen.net");
 
 
     }

@@ -11,13 +11,13 @@ class charts
 
         <div class="container">
             <div class="text-center">
-                <h1 class="mt-5">Analytics Dashboard</h1>
+                <h1 class="mt-5"> CognativeX Analytics Dashboard</h1>
             </div>
             <div class="row justify-content-center mt-5">
                 <div class="col-md-3">
                     <div class="analytics-section">
                         <h5>Page Views</h5>
-                        <p>Total Page Views: 1000</p>
+                        <div id="page_views"></div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -142,6 +142,31 @@ class charts
         </script>
         <?php
     }
+    public static function getPageViews($domain){
+        ?>
+        <script>
+            var pageViewsElement = document.getElementById("page_views");
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-get_page_views?domain=' + domain)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(jsonResponse => {
+                    // Accessing the single value from the JSON response
+                    var pageViews = jsonResponse;
+
+                    // Now you can use the pageViews variable to do whatever you need with the value
+                    pageViewsElement.textContent = pageViews;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        </script>
+        <?php
+    }
+
 
 
 
