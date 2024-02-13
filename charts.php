@@ -34,8 +34,8 @@ class charts
                 </div>
                 <div class="col-md-3">
                     <div class="analytics-section">
-                        <h5>data</h5>
-                        <p>data</p>
+                        <h5>CTR</h5>
+                        <h5 id="CTR" class=analytics-data></h5>
                     </div>
                 </div>
             </div>
@@ -162,6 +162,7 @@ class charts
 
                     // Now you can use the pageViews variable to do whatever you need with the value
                     pageViewsElement.textContent = pageViews;
+
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -184,8 +185,14 @@ class charts
                     // Accessing the single value from the JSON response
                     var totalClicks = jsonResponse;
 
-                    // Now you can use the pageViews variable to do whatever you need with the value
+                    // Now you can use the totalClicks variable to do whatever you need with the value
                     totalClicksElement.textContent = totalClicks;
+
+                    // Create a custom event
+                    var event = new Event('clicksElementUpdated');
+
+                    // Dispatch the custom event
+                    totalClicksElement.dispatchEvent(event);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -208,8 +215,14 @@ class charts
                     // Accessing the single value from the JSON response
                     var impressions = jsonResponse;
 
-                    // Now you can use the pageViews variable to do whatever you need with the value
+                    // Now you can use the impressions variable to do whatever you need with the value
                     impressionsElement.textContent = impressions;
+
+                    // Create a custom event
+                    var event = new Event('impressionsElementUpdated');
+
+                    // Dispatch the custom event
+                    impressionsElement.dispatchEvent(event);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -217,7 +230,49 @@ class charts
         </script>
         <?php
     }
+    public static function getCTR(){
+        ?>
+        <script>
+            var totalClicksElement = document.getElementById("total_clicks");
+            var impressionsElement = document.getElementById("impressions");
 
+            // Flag to track whether both events have been dispatched
+            var eventsDispatched = {
+                totalClicksUpdated: false,
+                impressionsUpdated: false
+            };
+
+            // Event listener for total clicks element
+            totalClicksElement.addEventListener('clicksElementUpdated', function() {
+                eventsDispatched.totalClicksUpdated = true;
+                checkEventsDispatched();
+            });
+
+            // Event listener for impressions element
+            impressionsElement.addEventListener('impressionsElementUpdated', function() {
+                eventsDispatched.impressionsUpdated = true;
+                checkEventsDispatched();
+            });
+
+            // Function to check if both events have been dispatched
+            function checkEventsDispatched() {
+                if (eventsDispatched.totalClicksUpdated && eventsDispatched.impressionsUpdated) {
+                    var clicks = totalClicksElement.textContent;
+                    var impressions = impressionsElement.textContent;
+                    if(impressions==0){
+                        document.getElementById("CTR").textContent=0
+                    }else{
+                        var CTR=((clicks/impressions)*100).toFixed(2)
+                        document.getElementById("CTR").textContent=CTR+" %";
+                    }
+
+
+
+                }
+            }
+        </script>
+        <?php
+    }
 
 
 
