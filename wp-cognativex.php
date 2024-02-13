@@ -95,6 +95,8 @@ class CognativexPlugin
         charts::getClicksWithDate('almayadeen.net');
         //get total page views
         charts::getPageViews("almayadeen.net");
+        //get total clicks
+        charts::getTotalClicks("almayadeen.net");
 
 
     }

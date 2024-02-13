@@ -23,7 +23,7 @@ class charts
                 <div class="col-md-3">
                     <div class="analytics-section">
                         <h5>Clicks</h5>
-                        <p>Total Clicks: 500</p>
+                        <div id="total_clicks"></div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -159,6 +159,30 @@ class charts
 
                     // Now you can use the pageViews variable to do whatever you need with the value
                     pageViewsElement.textContent = pageViews;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        </script>
+        <?php
+    }
+    public static function getTotalClicks($domain){
+        ?>
+        <script>
+            var totalClicksElement = document.getElementById("total_clicks");
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-total_clicks?domain=' + domain)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(jsonResponse => {
+                    // Accessing the single value from the JSON response
+                    var totalClicks = jsonResponse;
+
+                    // Now you can use the pageViews variable to do whatever you need with the value
+                    totalClicksElement.textContent = totalClicks;
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
