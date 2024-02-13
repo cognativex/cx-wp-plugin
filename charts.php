@@ -22,7 +22,7 @@ class charts
                 </div>
                 <div class="col-md-3">
                     <div class="analytics-section">
-                        <h5>Clicks</h5>
+                        <h5>Total Clicks</h5>
                         <div id="total_clicks"></div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@ class charts
             var domain = '<?php echo $domain; ?>';
             //         var domain='almayadeen.net';
             // Fetch data from the API
-            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/widget-click-wordpress?domain='+domain)
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-clicks_date_analysis?domain='+domain)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
