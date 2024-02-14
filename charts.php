@@ -86,10 +86,18 @@ class charts
             }
 
             .analytics-data {
-                color: rgba(75, 192, 192, 1);
+                color: #8b3091;
             }
         </style>
-
+        <script>
+            function formatNumbers(number) {
+                if (number > 1000) {
+                    number = ((number / 1000).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 3}) + 'K';
+                } else {
+                    number = number.toLocaleString();
+                }
+                return number;
+            }</script>
         <?php
     }
 
@@ -126,8 +134,8 @@ class charts
                             datasets: [{
                                 label: 'Clicks',
                                 data: clicksArray,
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: '#8b3091',
+                                borderColor: '#8b3091',
                                 borderWidth: 1
                             }]
                         },
@@ -166,7 +174,7 @@ class charts
                     var pageViews = jsonResponse;
 
                     // Now you can use the pageViews variable to do whatever you need with the value
-                    pageViewsElement.textContent = pageViews;
+                    pageViewsElement.textContent = formatNumbers(pageViews);
 
                 })
                 .catch(error => {
@@ -193,7 +201,7 @@ class charts
                     var totalClicks = jsonResponse;
 
                     // Now you can use the totalClicks variable to do whatever you need with the value
-                    totalClicksElement.textContent = totalClicks;
+                    totalClicksElement.textContent = formatNumbers(totalClicks);
 
                     // Create a custom event
                     var event = new Event('clicksElementUpdated');
@@ -225,7 +233,7 @@ class charts
                     var impressions = jsonResponse;
 
                     // Now you can use the impressions variable to do whatever you need with the value
-                    impressionsElement.textContent = impressions;
+                    impressionsElement.textContent = formatNumbers(impressions);
 
                     // Create a custom event
                     var event = new Event('impressionsElementUpdated');
@@ -268,12 +276,13 @@ class charts
             // Function to check if both events have been dispatched
             function checkEventsDispatched() {
                 if (eventsDispatched.totalClicksUpdated && eventsDispatched.impressionsUpdated) {
-                    var clicks = totalClicksElement.textContent;
-                    var impressions = impressionsElement.textContent;
+                    var clicks = ((totalClicksElement.textContent).replace("K", "")) * 1000;
+                    var impressions = ((impressionsElement.textContent).replace("K", "")) * 1000;
                     if (impressions == 0) {
                         document.getElementById("CTR").textContent = 0
                     } else {
                         var CTR = ((clicks / impressions) * 100).toFixed(2)
+
                         document.getElementById("CTR").textContent = CTR + " %";
                     }
 
@@ -306,8 +315,6 @@ class charts
                         daysArray.push(item.day);
                         pageViewArray.push(item.pageViews);
                     });
-
-
                     // Update the chart data
                     const ctx2 = document.getElementById('myChart2').getContext('2d');
                     const myChart2 = new Chart(ctx2, {
@@ -317,8 +324,8 @@ class charts
                             datasets: [{
                                 label: 'Page Views',
                                 data: pageViewArray,
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: '#8b3091',
+                                borderColor: '#8b3091',
                                 borderWidth: 1
                             }]
                         },
