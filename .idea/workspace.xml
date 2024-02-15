@@ -7,6 +7,7 @@
     <list default="true" id="08a43a7b-17bb-4658-acf9-654484572e9a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/charts.php" beforeDir="false" afterPath="$PROJECT_DIR$/charts.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-cognativex.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-cognativex.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +66,8 @@
       <workItem from="1707467574898" duration="59000" />
       <workItem from="1707740132593" duration="5899000" />
       <workItem from="1707809522947" duration="9590000" />
-      <workItem from="1707907300104" duration="653000" />
+      <workItem from="1707907300104" duration="2041000" />
+      <workItem from="1707983433287" duration="1861000" />
     </task>
     <servers />
   </component>

@@ -12,8 +12,8 @@ class charts
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <div class="container">
-            <div class="text-center">
-                <h1 class="mt-5"> CognativeX Analytics Dashboard</h1>
+            <div class="text-center" >
+                <h1 class="mt-5" > CognativeX Analytics Dashboard</h1>
             </div>
             <div class="row justify-content-center mt-5">
                 <div class="col-md-3">
@@ -53,18 +53,6 @@ class charts
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-6">
-                    <div class="analytics-section">
-                        <canvas id="myChart3"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="analytics-section">
-                        <canvas id="myChart4"></canvas>
-                    </div>
-                </div>
-            </div>
         </div>
         <style>
             .analytics-container {
@@ -86,15 +74,15 @@ class charts
             }
 
             .analytics-data {
-                color: #8b3091;
+                color:#8b3091;
             }
         </style>
         <script>
-            function formatNumbers(number) {
-                if (number > 1000) {
-                    number = ((number / 1000).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 3}) + 'K';
-                } else {
-                    number = number.toLocaleString();
+            function formatNumbers(number){
+                if(number>1000){
+                    number=((number / 1000).toFixed(2)).toLocaleString(undefined, { maximumFractionDigits: 3 }) + 'K';
+                }else{
+                    number= number.toLocaleString();
                 }
                 return number;
             }</script>
@@ -117,11 +105,11 @@ class charts
                 })
                 .then(jsonResponse => {
                     // Process the JSON data
-                    const daysArray = [];
+                    const dateArray = [];
                     const clicksArray = [];
 
                     jsonResponse.forEach(item => {
-                        daysArray.push(item.day);
+                        dateArray.push(item.date);
                         clicksArray.push(item.clicks);
                     });
 
@@ -130,7 +118,7 @@ class charts
                     const myChart = new Chart(ctx1, {
                         type: 'bar',
                         data: {
-                            labels: daysArray,
+                            labels: dateArray,
                             datasets: [{
                                 label: 'Clicks',
                                 data: clicksArray,
@@ -276,8 +264,8 @@ class charts
             // Function to check if both events have been dispatched
             function checkEventsDispatched() {
                 if (eventsDispatched.totalClicksUpdated && eventsDispatched.impressionsUpdated) {
-                    var clicks = ((totalClicksElement.textContent).replace("K", "")) * 1000;
-                    var impressions = ((impressionsElement.textContent).replace("K", "")) * 1000;
+                    var clicks = ((totalClicksElement.textContent).replace("K",""))*1000;
+                    var impressions = ((impressionsElement.textContent).replace("K",""))*1000;
                     if (impressions == 0) {
                         document.getElementById("CTR").textContent = 0
                     } else {
@@ -308,11 +296,11 @@ class charts
                 })
                 .then(jsonResponse => {
                     // Process the JSON data
-                    const daysArray = [];
+                    const dateArray = [];
                     const pageViewArray = [];
 
                     jsonResponse.forEach(item => {
-                        daysArray.push(item.day);
+                        dateArray.push(item.date);
                         pageViewArray.push(item.pageViews);
                     });
                     // Update the chart data
@@ -320,7 +308,7 @@ class charts
                     const myChart2 = new Chart(ctx2, {
                         type: 'bar',
                         data: {
-                            labels: daysArray,
+                            labels: dateArray,
                             datasets: [{
                                 label: 'Page Views',
                                 data: pageViewArray,

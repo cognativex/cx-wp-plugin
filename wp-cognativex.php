@@ -89,7 +89,7 @@ class CognativexPlugin
     public function custom_analytics_page_callback()
     {
         $domain = get_option('wp_cognativex_domain_setting');
-        $domain = 'almayadeen.net';
+        $domain='almayadeen.net';
         //get the html and css code
         charts::design();
         //get clicksWithClicks dashboard
