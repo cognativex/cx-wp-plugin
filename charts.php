@@ -12,14 +12,14 @@ class charts
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <div class="container">
-            <div class="text-center" >
-                <h1 class="mt-5" > CognativeX Analytics Dashboard</h1>
+            <div class="text-center">
+                <h1 class="mt-5"> CognativeX Analytics Dashboard</h1>
             </div>
             <div class="row justify-content-center mt-5">
                 <div class="col-md-3">
                     <div class="analytics-section">
                         <h5>Page Views </h5>
-                        <h5 id="page_views" class="analytics-data"></h5>
+                        <h5 id="pageviews" class="analytics-data"></h5>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -74,15 +74,15 @@ class charts
             }
 
             .analytics-data {
-                color:#8b3091;
+                color: #8b3091;
             }
         </style>
         <script>
-            function formatNumbers(number){
-                if(number>1000){
-                    number=((number / 1000).toFixed(2)).toLocaleString(undefined, { maximumFractionDigits: 3 }) + 'K';
-                }else{
-                    number= number.toLocaleString();
+            function formatNumbers(number) {
+                if (number > 1000) {
+                    number = ((number / 1000).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 3}) + 'K';
+                } else {
+                    number = number.toLocaleString();
                 }
                 return number;
             }</script>
@@ -139,148 +139,29 @@ class charts
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
-
-
         </script>
         <?php
     }
 
-    public static function getPageViews($domain)
-    {
-        ?>
-        <script>
-            var pageViewsElement = document.getElementById("page_views");
-            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-get_page_views?domain=' + domain)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(jsonResponse => {
-                    // Accessing the single value from the JSON response
-                    var pageViews = jsonResponse;
-
-                    // Now you can use the pageViews variable to do whatever you need with the value
-                    pageViewsElement.textContent = formatNumbers(pageViews);
-
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        </script>
-        <?php
-    }
-
-    public static function getTotalClicks($domain)
-    {
-        ?>
-        <script>
-            var totalClicksElement = document.getElementById("total_clicks");
-            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-total_clicks?domain=' + domain)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(jsonResponse => {
-                    // Accessing the single value from the JSON response
-                    var totalClicks = jsonResponse;
-
-                    // Now you can use the totalClicks variable to do whatever you need with the value
-                    totalClicksElement.textContent = formatNumbers(totalClicks);
-
-                    // Create a custom event
-                    var event = new Event('clicksElementUpdated');
-
-                    // Dispatch the custom event
-                    totalClicksElement.dispatchEvent(event);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        </script>
-        <?php
-    }
-
-    public static function getImpressions($domain)
-    {
-        ?>
-        <script>
-            var impressionsElement = document.getElementById("impressions");
-            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-impressions?domain=' + domain)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(jsonResponse => {
-                    // Accessing the single value from the JSON response
-                    var impressions = jsonResponse;
-
-                    // Now you can use the impressions variable to do whatever you need with the value
-                    impressionsElement.textContent = formatNumbers(impressions);
-
-                    // Create a custom event
-                    var event = new Event('impressionsElementUpdated');
-
-                    // Dispatch the custom event
-                    impressionsElement.dispatchEvent(event);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        </script>
-        <?php
-    }
-
-    public static function getCTR()
-    {
-        ?>
-        <script>
-            var totalClicksElement = document.getElementById("total_clicks");
-            var impressionsElement = document.getElementById("impressions");
-
-            // Flag to track whether both events have been dispatched
-            var eventsDispatched = {
-                totalClicksUpdated: false,
-                impressionsUpdated: false
-            };
-
-            // Event listener for total clicks element
-            totalClicksElement.addEventListener('clicksElementUpdated', function () {
-                eventsDispatched.totalClicksUpdated = true;
-                checkEventsDispatched();
-            });
-
-            // Event listener for impressions element
-            impressionsElement.addEventListener('impressionsElementUpdated', function () {
-                eventsDispatched.impressionsUpdated = true;
-                checkEventsDispatched();
-            });
-
-            // Function to check if both events have been dispatched
-            function checkEventsDispatched() {
-                if (eventsDispatched.totalClicksUpdated && eventsDispatched.impressionsUpdated) {
-                    var clicks = ((totalClicksElement.textContent).replace("K",""))*1000;
-                    var impressions = ((impressionsElement.textContent).replace("K",""))*1000;
-                    if (impressions == 0) {
-                        document.getElementById("CTR").textContent = 0
-                    } else {
-                        var CTR = ((clicks / impressions) * 100).toFixed(2)
-
-                        document.getElementById("CTR").textContent = CTR + " %";
-                    }
-
-
-                }
-            }
-        </script>
-        <?php
-    }
-
+    // var pageViewsElement = document.getElementById("page_views");
+    // fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-get_page_views?domain=' + domain)
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(jsonResponse => {
+    //         // Accessing the single value from the JSON response
+    //         var pageViews = jsonResponse;
+    //
+    //         // Now you can use the pageViews variable to do whatever you need with the value
+    //         pageViewsElement.textContent = formatNumbers(pageViews);
+    //
+    //     })
+    //     .catch(error => {
+    //         console.error('Error fetching data:', error);
+    //     });
     public static function getPageViewsWithDate($domain)
     {
         ?>
@@ -335,7 +216,41 @@ class charts
         <?php
     }
 
+    public static function getAnalysisResults($domain)
+    {
+        ?>
+        <script>
+            var domain = '<?php echo $domain; ?>';
+            var pageViewsElement = document.getElementById("pageviews");
+            var impressionsElement = document.getElementById("impressions");
+            var totalClicksElement = document.getElementById("total_clicks");
+            var CTRElement = document.getElementById("CTR");
 
+            // Fetch data from the API
+            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp_CX_analysis?domain='
+                + domain + "&date1=2023-07-01&date2=2023-07-01")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(jsonResponse => {
+                    pageViewsElement.textContent = formatNumbers(jsonResponse.pageviews);
+                    impressionsElement.textContent = formatNumbers(jsonResponse.impressions);
+                    totalClicksElement.textContent = formatNumbers(jsonResponse.clicks);
+                    CTRElement.textContent = (formatNumbers(jsonResponse.CTR)) + " %";
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+
+
+        </script>
+        <?php
+
+
+    }
 }
 
 ?>

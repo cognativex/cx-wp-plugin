@@ -94,16 +94,10 @@ class CognativexPlugin
         charts::design();
         //get clicksWithClicks dashboard
         charts::getClicksWithDate($domain);
-        //get total page views
-        charts::getPageViews($domain);
-        //get total clicks
-        charts::getTotalClicks($domain);
-        //get impressions
-        charts::getImpressions($domain);
-        //get CTR
-        charts::getCTR();
         //get page views with date
         charts::getPageViewsWithDate($domain);
+        //get analysis results
+        charts::getAnalysisResults($domain);
 
 
     }
