@@ -20,7 +20,7 @@ class charts
                     <select id="DateSelect" class="custom-select" style="width: auto;">
                         <option value="1day">Yesterday</option>
                         <option value="7days">7 Days</option>
-                        <option value="15days">15 Days</option>
+                        <option value="14days">14 Days</option>
                         <option value="30days">30 Days</option>
                     </select>
                 </div>
@@ -178,8 +178,8 @@ class charts
                     case "7days":
                         getAnalysisResults(domain, getDate(1), getDate(7));
                         break;
-                    case "15days":
-                        getAnalysisResults(domain, getDate(1), getDate(15));
+                    case "14days":
+                        getAnalysisResults(domain, getDate(1), getDate(14));
                         break;
                     case "30days":
                         getAnalysisResults(domain, getDate(1), getDate(30));
