@@ -2,7 +2,7 @@
 
 class charts
 {
-    public static function design()
+    public static function design($domain)
     {
 
         ?>
@@ -12,8 +12,18 @@ class charts
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <div class="container">
-            <div class="text-center">
-                <h1 class="mt-5"> CognativeX Analytics Dashboard</h1>
+            <div class="text-center d-flex justify-content-between align-items-center mt-5">
+                <div>
+                    <h2 class="mt mb-0">CognativeX Analytics Dashboard</h2>
+                </div>
+                <div>
+                    <select id="DateSelect" class="custom-select" style="width: auto;">
+                        <option value="1day">Yesterday</option>
+                        <option value="7days">7 Days</option>
+                        <option value="15days">15 Days</option>
+                        <option value="30days">30 Days</option>
+                    </select>
+                </div>
             </div>
             <div class="row justify-content-center mt-5">
                 <div class="col-md-3">
@@ -76,8 +86,36 @@ class charts
             .analytics-data {
                 color: #8b3091;
             }
+
+            .text-center {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            /* Custom styling for select element */
+            .custom-select {
+                display: inline-block;
+                vertical-align: middle;
+                padding: 8px 12px;
+                font-size: 14px;
+                border-radius: 5px;
+                background-color: #f0f0f0;
+                border: 1px solid #ccc;
+                outline: none;
+                transition: border-color 0.2s ease-in-out;
+            }
+
+            .custom-select:hover,
+            .custom-select:focus {
+                border-color: #999;
+            }
         </style>
         <script>
+            var domain = '<?php echo $domain; ?>';
+
+            //format numbers
             function formatNumbers(number) {
                 if (number > 1000) {
                     number = ((number / 1000).toFixed(2)).toLocaleString(undefined, {maximumFractionDigits: 3}) + 'K';
@@ -85,15 +123,78 @@ class charts
                     number = number.toLocaleString();
                 }
                 return number;
-            }</script>
+            }
+
+            //parsing date to YYYY-MM-DD format function
+            function getDate(date) {
+                var yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - date);
+                var formattedDate = yesterday.toISOString().split('T')[0];
+                return formattedDate;
+            }
+
+            ///results api by date
+            function getAnalysisResults(domain, date1, date2) {
+                var pageViewsElement = document.getElementById("pageviews");
+                var impressionsElement = document.getElementById("impressions");
+                var totalClicksElement = document.getElementById("total_clicks");
+                var CTRElement = document.getElementById("CTR");
+
+                // Fetch data from the API
+                fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp_CX_analysis?domain='
+                    + domain + "&date1=" + date1 + "&date2=" + date2)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(jsonResponse => {
+                        pageViewsElement.textContent = formatNumbers(jsonResponse.pageviews);
+                        impressionsElement.textContent = formatNumbers(jsonResponse.impressions);
+                        totalClicksElement.textContent = formatNumbers(jsonResponse.clicks);
+                        CTRElement.textContent = (formatNumbers(jsonResponse.CTR)) + " %";
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                    });
+
+
+            }
+
+            //default select->yesterday
+            // Trigger the change event manually when the page is loaded to handle the default selected option
+            document.addEventListener("DOMContentLoaded", function () {
+                var defaultSelectedValue = document.getElementById("DateSelect").value;
+                getAnalysisResults(domain, getDate(1), getDate(1));
+            });
+            //the analysis results will be changed based on the selected date
+            document.getElementById("DateSelect").addEventListener("change", function () {
+                var selectedValue = this.value;
+                switch (selectedValue) {
+                    case "1day":
+                        getAnalysisResults(domain, getDate(1), getDate(1));
+                        break;
+                    case "7days":
+                        getAnalysisResults(domain, getDate(1), getDate(7));
+                        break;
+                    case "15days":
+                        getAnalysisResults(domain, getDate(1), getDate(15));
+                        break;
+                    case "30days":
+                        getAnalysisResults(domain, getDate(1), getDate(30));
+                        break;
+                }
+
+            });
+        </script>
         <?php
     }
 
-    public static function getClicksWithDate($domain)
+    public static function getClicksWithDate()
     {
         ?>
         <script>
-            var domain = '<?php echo $domain; ?>';
             //         var domain='almayadeen.net';
             // Fetch data from the API
             fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-clicks_date_analysis?domain=' + domain)
@@ -143,30 +244,10 @@ class charts
         <?php
     }
 
-    // var pageViewsElement = document.getElementById("page_views");
-    // fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-get_page_views?domain=' + domain)
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(jsonResponse => {
-    //         // Accessing the single value from the JSON response
-    //         var pageViews = jsonResponse;
-    //
-    //         // Now you can use the pageViews variable to do whatever you need with the value
-    //         pageViewsElement.textContent = formatNumbers(pageViews);
-    //
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching data:', error);
-    //     });
-    public static function getPageViewsWithDate($domain)
+    public static function getPageViewsWithDate()
     {
         ?>
         <script>
-            var domain = '<?php echo $domain; ?>';
             // Fetch data from the API
             fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp-page_views_date_analysis?domain=' + domain)
                 .then(response => {
@@ -216,41 +297,7 @@ class charts
         <?php
     }
 
-    public static function getAnalysisResults($domain)
-    {
-        ?>
-        <script>
-            var domain = '<?php echo $domain; ?>';
-            var pageViewsElement = document.getElementById("pageviews");
-            var impressionsElement = document.getElementById("impressions");
-            var totalClicksElement = document.getElementById("total_clicks");
-            var CTRElement = document.getElementById("CTR");
 
-            // Fetch data from the API
-            fetch('https://us-central1-cognativex-dev.cloudfunctions.net/wp_CX_analysis?domain='
-                + domain + "&date1=2023-07-01&date2=2023-07-01")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(jsonResponse => {
-                    pageViewsElement.textContent = formatNumbers(jsonResponse.pageviews);
-                    impressionsElement.textContent = formatNumbers(jsonResponse.impressions);
-                    totalClicksElement.textContent = formatNumbers(jsonResponse.clicks);
-                    CTRElement.textContent = (formatNumbers(jsonResponse.CTR)) + " %";
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-
-
-        </script>
-        <?php
-
-
-    }
 }
 
 ?>
